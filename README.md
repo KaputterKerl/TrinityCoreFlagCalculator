@@ -4,11 +4,15 @@ Small interactive command-line tool that decodes TrinityCore database bitmask va
 
 ## Supported flag sets
 
-- **Creature template:** `npcflag`, `unit_flags`, `unit_flags2`, `dynamicflags`, `type_flags`, `flags_extra`
-- **Quest template:** `Flags`
-- **Item template:** `Flags`, `Flags2`, `Flags3`, custom flags
+Tables are generated from the TrinityCore `master` headers (October 2026).
 
-A reference table of all known flags is available from the menus (`s`).
+- **Creature template:** `npcflag`, `npcflag2`, `unit_flags`, `unit_flags2`, `unit_flags3`, `flags_extra`, and the creature static flags 1 to 8
+- **Quest template:** `Flags`, `FlagsEx`, `FlagsEx2`
+- **Item template:** `Flags`, `Flags2`, `Flags3`, `Flags4`, custom flags
+
+The old Type Flags table is gone because it was replaced by the creature static flags in `master`. The old Dynamic Flags table is gone because `master` no longer has a `UNIT_DYNFLAG_*` enum in the headers this tool is generated from.
+
+A reference table of all known flags is available from the main menu and from each category menu (`s`).
 
 ## Usage
 
