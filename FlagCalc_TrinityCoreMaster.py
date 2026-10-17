@@ -3,28 +3,28 @@ import sys
 
 class WoWFlagDecoder:
     def __init__(self):
-        # Flag tables, generated from the TrinityCore master headers
-        # (UnitDefines.h, CreatureData.h, QuestDef.h, ItemTemplate.h)
-        self.npc_flags = {
-            1: "Gossip", 2: "Quest Giver",
+        # Flag tables, generated from the flag enums of
+        # TrinityCore/TrinityCore branch master
+        self.tbl_npcflags = {
+            1: "Gossip", 2: "Questgiver",
             4: "Account Banker", 8: "Unk2",
-            16: "Trainer", 32: "Class Trainer",
-            64: "Profession Trainer", 128: "Vendor",
+            16: "Trainer", 32: "Trainer Class",
+            64: "Trainer Profession", 128: "Vendor",
             256: "Vendor Ammo", 512: "Vendor Food",
             1024: "Vendor Poison", 2048: "Vendor Reagent",
-            4096: "Repairer", 8192: "Flight Master",
-            16384: "Spirit Healer", 32768: "Spirit Guide",
+            4096: "Repair", 8192: "Flightmaster",
+            16384: "Spirit Healer", 32768: "Area Spirit Healer",
             65536: "Innkeeper", 131072: "Banker",
-            262144: "Petitioner", 524288: "Tabard Designer",
+            262144: "Petitioner", 524288: "Tabarddesigner",
             1048576: "Battlemaster", 2097152: "Auctioneer",
-            4194304: "Stable Master", 8388608: "Guild Banker",
-            16777216: "Spellclick", 33554432: "PlayerVehicle",
+            4194304: "Stablemaster", 8388608: "Guild Banker",
+            16777216: "Spellclick", 33554432: "Player Vehicle",
             67108864: "Mailbox", 134217728: "Artifact Power Respec",
             268435456: "Transmogrifier", 536870912: "Vaultkeeper",
             1073741824: "Wild Battle Pet", 2147483648: "Black Market"
         }
 
-        self.npc_flags2 = {
+        self.tbl_npcflags2 = {
             1: "UNIT_NPC_FLAG_2_ITEM_UPGRADE_MASTER", 2: "UNIT_NPC_FLAG_2_GARRISON_ARCHITECT",
             4: "UNIT_NPC_FLAG_2_STEERING", 8: "UNIT_NPC_FLAG_2_AREA_SPIRIT_HEALER_INDIVIDUAL",
             16: "UNIT_NPC_FLAG_2_SHIPMENT_CRAFTER", 32: "UNIT_NPC_FLAG_2_GARRISON_MISSION_NPC",
@@ -35,7 +35,7 @@ class WoWFlagDecoder:
             524288: "UNIT_NPC_FLAG_2_PERKS_VENDOR", 2097152: "UNIT_NPC_FLAG_2_PERSONAL_TABARD_DESIGNER"
         }
 
-        self.unit_flags = {
+        self.tbl_unitflags = {
             1: "UNIT_FLAG_SERVER_CONTROLLED", 2: "UNIT_FLAG_NON_ATTACKABLE",
             4: "UNIT_FLAG_REMOVE_CLIENT_CONTROL", 8: "UNIT_FLAG_PLAYER_CONTROLLED",
             16: "UNIT_FLAG_RENAME", 32: "UNIT_FLAG_PREPARATION",
@@ -54,7 +54,7 @@ class WoWFlagDecoder:
             1073741824: "UNIT_FLAG_SHEATHE", 2147483648: "UNIT_FLAG_IMMUNE"
         }
 
-        self.unit_flags2 = {
+        self.tbl_unitflags2 = {
             1: "UNIT_FLAG2_FEIGN_DEATH", 2: "UNIT_FLAG2_HIDE_BODY",
             4: "UNIT_FLAG2_IGNORE_REPUTATION", 8: "UNIT_FLAG2_COMPREHEND_LANG",
             16: "UNIT_FLAG2_MIRROR_IMAGE", 32: "UNIT_FLAG2_DONT_FADE_IN",
@@ -73,7 +73,7 @@ class WoWFlagDecoder:
             1073741824: "UNIT_FLAG2_INFINITE_AOI", 2147483648: "UNIT_FLAG2_UNUSED_13"
         }
 
-        self.unit_flags3 = {
+        self.tbl_unitflags3 = {
             1: "UNIT_FLAG3_UNK0", 2: "UNIT_FLAG3_UNCONSCIOUS_ON_DEATH",
             4: "UNIT_FLAG3_ALLOW_MOUNTED_COMBAT", 8: "UNIT_FLAG3_GARRISON_PET",
             16: "UNIT_FLAG3_UI_CAN_GET_POSITION", 32: "UNIT_FLAG3_AI_OBSTACLE",
@@ -92,7 +92,7 @@ class WoWFlagDecoder:
             1073741824: "UNIT_FLAG3_UNK30", 2147483648: "UNIT_FLAG3_UNK31"
         }
 
-        self.flags_extra = {
+        self.tbl_creatureflagsextra = {
             1: "CREATURE_FLAG_EXTRA_INSTANCE_BIND", 2: "CREATURE_FLAG_EXTRA_CIVILIAN",
             4: "CREATURE_FLAG_EXTRA_NO_PARRY", 8: "CREATURE_FLAG_EXTRA_NO_PARRY_HASTEN",
             16: "CREATURE_FLAG_EXTRA_NO_BLOCK", 32: "CREATURE_FLAG_EXTRA_NO_CRUSHING_BLOWS",
@@ -111,7 +111,7 @@ class WoWFlagDecoder:
             1073741824: "CREATURE_FLAG_EXTRA_IMMUNITY_KNOCKBACK", 2147483648: "CREATURE_FLAG_EXTRA_UNUSED_31"
         }
 
-        self.static_flags1 = {
+        self.tbl_creaturestaticflags = {
             1: "CREATURE_STATIC_FLAG_MOUNTABLE", 2: "CREATURE_STATIC_FLAG_NO_XP",
             4: "CREATURE_STATIC_FLAG_NO_LOOT", 8: "CREATURE_STATIC_FLAG_UNKILLABLE",
             16: "CREATURE_STATIC_FLAG_TAMEABLE", 32: "CREATURE_STATIC_FLAG_IMMUNE_PC",
@@ -130,7 +130,7 @@ class WoWFlagDecoder:
             1073741824: "CREATURE_STATIC_FLAG_MORE_AUDIBLE", 2147483648: "CREATURE_STATIC_FLAG_LARGE_AOI"
         }
 
-        self.static_flags2 = {
+        self.tbl_creaturestaticflags2 = {
             1: "CREATURE_STATIC_FLAG_2_NO_PET_SCALING", 2: "CREATURE_STATIC_FLAG_2_FORCE_RAID_COMBAT",
             4: "CREATURE_STATIC_FLAG_2_LOCK_TAPPERS_TO_RAID_ON_DEATH", 8: "CREATURE_STATIC_FLAG_2_NO_HARMFUL_VERTEX_COLORING",
             16: "CREATURE_STATIC_FLAG_2_NO_CRUSHING_BLOWS", 32: "CREATURE_STATIC_FLAG_2_NO_OWNER_THREAT",
@@ -149,7 +149,7 @@ class WoWFlagDecoder:
             1073741824: "CREATURE_STATIC_FLAG_2_NO_SKILL_GAINS", 2147483648: "CREATURE_STATIC_FLAG_2_NO_PET_BAR"
         }
 
-        self.static_flags3 = {
+        self.tbl_creaturestaticflags3 = {
             1: "CREATURE_STATIC_FLAG_3_NO_DAMAGE_HISTORY", 2: "CREATURE_STATIC_FLAG_3_DONT_PVP_ENABLE_OWNER",
             4: "CREATURE_STATIC_FLAG_3_DONT_FADE_IN", 8: "CREATURE_STATIC_FLAG_3_NON_UNIQUE_IN_COMBAT_LOG",
             16: "CREATURE_STATIC_FLAG_3_SKIN_WITH_ENGINEERING", 32: "CREATURE_STATIC_FLAG_3_NO_AGGRO_ON_LEASH",
@@ -168,7 +168,7 @@ class WoWFlagDecoder:
             1073741824: "CREATURE_STATIC_FLAG_3_AI_CAN_AUTO_TAKEOFF_IN_COMBAT", 2147483648: "CREATURE_STATIC_FLAG_3_AI_CAN_AUTO_LAND_IN_COMBAT"
         }
 
-        self.static_flags4 = {
+        self.tbl_creaturestaticflags4 = {
             1: "CREATURE_STATIC_FLAG_4_NO_BIRTH_ANIM", 2: "CREATURE_STATIC_FLAG_4_TREAT_AS_PLAYER_FOR_DIMINISHING_RETURNS",
             4: "CREATURE_STATIC_FLAG_4_TREAT_AS_PLAYER_FOR_PVP_DEBUFF_DURATION", 8: "CREATURE_STATIC_FLAG_4_ONLY_DISPLAY_GOSSIP_FOR_SUMMONER",
             16: "CREATURE_STATIC_FLAG_4_NO_DEATH_SCREAM", 32: "CREATURE_STATIC_FLAG_4_CAN_BE_HEALED_BY_ENEMIES",
@@ -187,7 +187,7 @@ class WoWFlagDecoder:
             1073741824: "CREATURE_STATIC_FLAG_4_HIDE_NAME_IN_WORLD_FRAME", 2147483648: "CREATURE_STATIC_FLAG_4_QUEST_BOSS"
         }
 
-        self.static_flags5 = {
+        self.tbl_creaturestaticflags5 = {
             1: "CREATURE_STATIC_FLAG_5_UNTARGETABLE_BY_CLIENT", 2: "CREATURE_STATIC_FLAG_5_FORCE_SELF_MOUNTING",
             4: "CREATURE_STATIC_FLAG_5_UNINTERACTIBLE_IF_HOSTILE", 8: "CREATURE_STATIC_FLAG_5_DISABLES_XP_AWARD",
             16: "CREATURE_STATIC_FLAG_5_DISABLE_AI_PREDICTION", 32: "CREATURE_STATIC_FLAG_5_NO_LEAVE_COMBAT_STATE_RESTORE",
@@ -206,7 +206,7 @@ class WoWFlagDecoder:
             1073741824: "CREATURE_STATIC_FLAG_5_NO_INTERACT_ON_LEFT_CLICK", 2147483648: "CREATURE_STATIC_FLAG_5_GIVE_CRITERIA_KILL_CREDIT_WHEN_CHARMED"
         }
 
-        self.static_flags6 = {
+        self.tbl_creaturestaticflags6 = {
             1: "CREATURE_STATIC_FLAG_6_DO_NOT_AUTO_RESUMMON_THIS_COMPANION_CREATURE", 2: "CREATURE_STATIC_FLAG_6_SMOOTH_PHASING_REPLACE_VISIBLE_UNIT_IF_AVAILABLE",
             4: "CREATURE_STATIC_FLAG_6_IGNORE_THE_REALM_COALESCING_HIDING_CODE", 8: "CREATURE_STATIC_FLAG_6_TAPS_TO_FACTION",
             16: "CREATURE_STATIC_FLAG_6_ONLY_QUEST_GIVER_FOR_SUMMONER", 32: "CREATURE_STATIC_FLAG_6_AI_COMBAT_RETURN_PRECISE",
@@ -225,7 +225,7 @@ class WoWFlagDecoder:
             1073741824: "CREATURE_STATIC_FLAG_6_DO_NOT_PLAY_PROCEDURAL_WOUND_ANIM", 2147483648: "CREATURE_STATIC_FLAG_6_APPLY_PROCEDURAL_WOUND_ANIM_TO_BASE"
         }
 
-        self.static_flags7 = {
+        self.tbl_creaturestaticflags7 = {
             1: "CREATURE_STATIC_FLAG_7_IMPORTANT_NPC", 2: "CREATURE_STATIC_FLAG_7_IMPORTANT_QUEST_NPC",
             4: "CREATURE_STATIC_FLAG_7_LARGE_NAMEPLATE", 8: "CREATURE_STATIC_FLAG_7_TRIVIAL_PET",
             16: "CREATURE_STATIC_FLAG_7_AI_ENEMIES_DONT_BACKUP_WHEN_I_GET_ROOTED", 32: "CREATURE_STATIC_FLAG_7_NO_AUTOMATIC_COMBAT_ANCHOR",
@@ -234,12 +234,12 @@ class WoWFlagDecoder:
             1024: "CREATURE_STATIC_FLAG_7_DISABLE_KILL_CREDIT_FOR_OFFLINE_PLAYERS", 524288: "CREATURE_STATIC_FLAG_7_AI_ADDITIONAL_PATHING"
         }
 
-        self.static_flags8 = {
+        self.tbl_creaturestaticflags8 = {
             2: "CREATURE_STATIC_FLAG_8_FORCE_CLOSE_IN_ON_PATH_FAIL_BEHAVIOR", 32: "CREATURE_STATIC_FLAG_8_USE_2D_CHASING_CALCULATION",
             64: "CREATURE_STATIC_FLAG_8_USE_FAST_CLASSIC_HEARTBEAT"
         }
 
-        self.quest_flags = {
+        self.tbl_questflags = {
             1: "QUEST_FLAGS_COMPLETION_NO_DEATH", 2: "QUEST_FLAGS_COMPLETION_EVENT",
             4: "QUEST_FLAGS_COMPLETION_AREA_TRIGGER", 8: "QUEST_FLAGS_SHARABLE",
             16: "QUEST_FLAGS_HAS_CONDITION", 32: "QUEST_FLAGS_HIDE_REWARD_POI",
@@ -258,7 +258,7 @@ class WoWFlagDecoder:
             1073741824: "QUEST_FLAGS_ITEMS_GLOW_WHEN_COMPLETE", 2147483648: "QUEST_FLAGS_FAIL_ON_LOGOUT"
         }
 
-        self.quest_flags_ex = {
+        self.tbl_questflagsex = {
             1: "QUEST_FLAGS_EX_NO_ITEM_REMOVAL", 2: "QUEST_FLAGS_EX_SUPPRESS_GOSSIP_COMPLETE",
             4: "QUEST_FLAGS_EX_SUPPRESS_GOSSIP_ACCEPT", 8: "QUEST_FLAGS_EX_DENY_PLAYER_QUESTGIVER",
             16: "QUEST_FLAGS_EX_DISPLAY_CLASS_CHOICE_REWARDS", 32: "QUEST_FLAGS_EX_DISPLAY_SPEC_CHOICE_REWARDS",
@@ -277,7 +277,7 @@ class WoWFlagDecoder:
             1073741824: "QUEST_FLAGS_EX_KEEP_PROGRESS_ON_FACTION_CHANGE", 2147483648: "QUEST_FLAGS_EX_PUSH_TEAM_QUEST_USING_MAP_CONTROLLER"
         }
 
-        self.quest_flags_ex2 = {
+        self.tbl_questflagsex2 = {
             1: "QUEST_FLAGS_EX2_RESET_ON_GAME_MILESTONE", 2: "QUEST_FLAGS_EX2_WAR_MODE_REWARDS_OPT_OUT",
             4: "QUEST_FLAGS_EX2_AWARD_HIGHEST_PROFESSION", 8: "QUEST_FLAGS_EX2_NOT_REPLAYABLE",
             16: "QUEST_FLAGS_EX2_NO_REPLAY_REWARDS", 32: "QUEST_FLAGS_EX2_DISABLE_WAYPOINT_PATHING",
@@ -293,7 +293,7 @@ class WoWFlagDecoder:
             67108864: "QUEST_FLAGS_EX2_ABANDON_ON_DISABLE"
         }
 
-        self.item_flags = {
+        self.tbl_itemflags = {
             1: "ITEM_FLAG_NO_PICKUP", 2: "ITEM_FLAG_CONJURED",
             4: "ITEM_FLAG_HAS_LOOT", 8: "ITEM_FLAG_HEROIC_TOOLTIP",
             16: "ITEM_FLAG_DEPRECATED", 32: "ITEM_FLAG_NO_USER_DESTROY",
@@ -312,7 +312,7 @@ class WoWFlagDecoder:
             1073741824: "ITEM_FLAG_REPORT_TO_GUILD_CHAT", 2147483648: "ITEM_FLAG_NO_PROGRESSIVE_LOOT"
         }
 
-        self.item_flags2 = {
+        self.tbl_itemflags2 = {
             1: "ITEM_FLAG2_FACTION_HORDE", 2: "ITEM_FLAG2_FACTION_ALLIANCE",
             4: "ITEM_FLAG2_DONT_IGNORE_BUY_PRICE", 8: "ITEM_FLAG2_CLASSIFY_AS_CASTER",
             16: "ITEM_FLAG2_CLASSIFY_AS_PHYSICAL", 32: "ITEM_FLAG2_EVERYONE_CAN_ROLL_NEED",
@@ -331,7 +331,7 @@ class WoWFlagDecoder:
             1073741824: "ITEM_FLAG2_DISENCHANT_TO_LOOT_TABLE", 2147483648: "ITEM_FLAG2_USED_IN_A_TRADESKILL"
         }
 
-        self.item_flags3 = {
+        self.tbl_itemflags3 = {
             1: "ITEM_FLAG3_DONT_DESTROY_ON_QUEST_ACCEPT", 2: "ITEM_FLAG3_ITEM_CAN_BE_UPGRADED",
             4: "ITEM_FLAG3_UPGRADE_FROM_ITEM_OVERRIDES_DROP_UPGRADE", 8: "ITEM_FLAG3_ALWAYS_FFA_IN_LOOT",
             16: "ITEM_FLAG3_HIDE_UPGRADE_LEVELS_IF_NOT_UPGRADED", 32: "ITEM_FLAG3_UPDATE_INTERACTIONS",
@@ -350,7 +350,7 @@ class WoWFlagDecoder:
             1073741824: "ITEM_FLAG3_CONTAINER_SAVES_PLAYER_DATA", 2147483648: "ITEM_FLAG3_NO_VOID_STORAGE"
         }
 
-        self.item_flags4 = {
+        self.tbl_itemflags4 = {
             1: "ITEM_FLAG4_HANDLE_ON_USE_EFFECT_IMMEDIATELY", 2: "ITEM_FLAG4_ALWAYS_SHOW_ITEM_LEVEL_IN_TOOLTIP",
             4: "ITEM_FLAG4_SHOWS_GENERATION_WITH_RANDOM_STATS", 8: "ITEM_FLAG4_ACTIVATE_ON_EQUIP_EFFECTS_WHEN_TRANSMOGRIFIED",
             16: "ITEM_FLAG4_ENFORCE_TRANSMOG_WITH_CHILD_ITEM", 32: "ITEM_FLAG4_SCRAPABLE",
@@ -368,7 +368,7 @@ class WoWFlagDecoder:
             268435456: "ITEM_FLAG4_DONT_REPORT_LOOT_LOG_TO_SELF"
         }
 
-        self.item_flags_custom = {
+        self.tbl_itemflagscustom = {
             1: "ITEM_FLAGS_CU_UNUSED", 2: "ITEM_FLAGS_CU_IGNORE_QUEST_STATUS",
             4: "ITEM_FLAGS_CU_FOLLOW_LOOT_RULES"
         }
@@ -376,32 +376,32 @@ class WoWFlagDecoder:
         # Menu layout: (menu title, [(table title, attribute name), ...])
         self.categories = [
             ("Creature Template Flags", [
-                ("NPC FLAGS", "npc_flags"),
-                ("NPC FLAGS 2", "npc_flags2"),
-                ("UNIT_FLAGS", "unit_flags"),
-                ("UNIT_FLAGS2", "unit_flags2"),
-                ("UNIT_FLAGS3", "unit_flags3"),
-                ("FLAGS_EXTRA", "flags_extra"),
-                ("STATIC_FLAGS1", "static_flags1"),
-                ("STATIC_FLAGS2", "static_flags2"),
-                ("STATIC_FLAGS3", "static_flags3"),
-                ("STATIC_FLAGS4", "static_flags4"),
-                ("STATIC_FLAGS5", "static_flags5"),
-                ("STATIC_FLAGS6", "static_flags6"),
-                ("STATIC_FLAGS7", "static_flags7"),
-                ("STATIC_FLAGS8", "static_flags8")
+                ("NPC FLAGS", "tbl_npcflags"),
+                ("NPC FLAGS 2", "tbl_npcflags2"),
+                ("UNIT_FLAGS", "tbl_unitflags"),
+                ("UNIT_FLAGS2", "tbl_unitflags2"),
+                ("UNIT_FLAGS3", "tbl_unitflags3"),
+                ("FLAGS_EXTRA", "tbl_creatureflagsextra"),
+                ("STATIC_FLAGS1", "tbl_creaturestaticflags"),
+                ("STATIC_FLAGS2", "tbl_creaturestaticflags2"),
+                ("STATIC_FLAGS3", "tbl_creaturestaticflags3"),
+                ("STATIC_FLAGS4", "tbl_creaturestaticflags4"),
+                ("STATIC_FLAGS5", "tbl_creaturestaticflags5"),
+                ("STATIC_FLAGS6", "tbl_creaturestaticflags6"),
+                ("STATIC_FLAGS7", "tbl_creaturestaticflags7"),
+                ("STATIC_FLAGS8", "tbl_creaturestaticflags8")
             ]),
             ("Quest Template Flags", [
-                ("QUEST_FLAGS", "quest_flags"),
-                ("QUEST_FLAGS_EX", "quest_flags_ex"),
-                ("QUEST_FLAGS_EX2", "quest_flags_ex2")
+                ("QUEST_FLAGS", "tbl_questflags"),
+                ("QUEST_FLAGS_EX", "tbl_questflagsex"),
+                ("QUEST_FLAGS_EX2", "tbl_questflagsex2")
             ]),
             ("Item Template Flags", [
-                ("ITEM_FLAGS", "item_flags"),
-                ("ITEM_FLAGS2", "item_flags2"),
-                ("ITEM_FLAGS3", "item_flags3"),
-                ("ITEM_FLAGS4", "item_flags4"),
-                ("ITEM_FLAGS_CUSTOM", "item_flags_custom")
+                ("ITEM_FLAGS", "tbl_itemflags"),
+                ("ITEM_FLAGS2", "tbl_itemflags2"),
+                ("ITEM_FLAGS3", "tbl_itemflags3"),
+                ("ITEM_FLAGS4", "tbl_itemflags4"),
+                ("ITEM_FLAGS_CUSTOM", "tbl_itemflagscustom")
             ])
         ]
 
@@ -547,6 +547,7 @@ def main():
     while True:
         decoder.clear_screen()
         print("WoW Flag Decoder - Main Menu")
+        print("TrinityCore master")
         print("=" * 30)
         for number, (menu_title, _) in enumerate(decoder.categories, 1):
             print(f"{number} - {menu_title}")
